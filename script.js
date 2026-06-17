@@ -59,9 +59,10 @@ async function loadProducts() {
   }
 }
 
-function buildCard({ name, category, description, price, image_url }) {
-  const imgHTML = image_url
-    ? `<img src="${image_url}" alt="${name}" loading="lazy" />`
+function buildCard({ name, category, description, price, image_url, images }) {
+  const primaryImg = (images && images.length > 0) ? images[0] : image_url;
+  const imgHTML = primaryImg
+    ? `<img src="${primaryImg}" alt="${name}" loading="lazy" />`
     : `<div class="item-img-placeholder">
         <svg viewBox="0 0 80 60" width="60" opacity="0.25" fill="none" stroke="#c8922a" stroke-width="1.2">
           <rect x="10" y="10" width="60" height="40" rx="3"/>
