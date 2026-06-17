@@ -365,6 +365,38 @@ nav ul a:hover { color: var(--gold); }
 }
 .lightbox-close:hover { color: var(--gold); }
 
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(43, 26, 14, 0.7);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  font-size: 1.4rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-nav:hover { background: var(--gold); color: var(--brown); }
+.lightbox-nav[hidden] { display: none; }
+.lightbox-prev { left: 1.5rem; }
+.lightbox-next { right: 1.5rem; }
+
+.lightbox-counter {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--cream-dim);
+}
+
 .collection-loading {
   grid-column: 1 / -1;
   display: flex;

@@ -96,15 +96,31 @@ function buildCTACard() {
 loadProducts();
 
 // ── Lightbox ──────────────────────────────────────────────────
-const lightbox     = document.getElementById('lightbox');
-const lightboxImg  = document.getElementById('lightbox-img');
+const lightbox      = document.getElementById('lightbox');
+const lightboxImg   = document.getElementById('lightbox-img');
 const lightboxClose = document.getElementById('lightbox-close');
+const lightboxPrev  = document.getElementById('lightbox-prev');
+const lightboxNext  = document.getElementById('lightbox-next');
+const lightboxCounter = document.getElementById('lightbox-counter');
 
-function openLightbox(src, alt) {
-  lightboxImg.src = src;
+let lbImages = [];
+let lbIndex  = 0;
+
+function showLightboxImage(index) {
+  lbIndex = index;
+  lightboxImg.src = lbImages[lbIndex];
+  lightboxPrev.hidden = lbImages.length <= 1;
+  lightboxNext.hidden = lbImages.length <= 1;
+  lightboxCounter.textContent = lbImages.length > 1
+    ? `${lbIndex + 1} / ${lbImages.length}` : '';
+}
+
+function openLightbox(images, startIndex, alt) {
+  lbImages = images;
   lightboxImg.alt = alt || '';
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
+  showLightboxImage(startIndex);
 }
 
 function closeLightbox() {
@@ -114,9 +130,18 @@ function closeLightbox() {
 
 lightboxClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showLightboxImage((lbIndex - 1 + lbImages.length) % lbImages.length); });
+lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showLightboxImage((lbIndex + 1) % lbImages.length); });
+document.addEventListener('keydown', (e) => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') showLightboxImage((lbIndex - 1 + lbImages.length) % lbImages.length);
+  if (e.key === 'ArrowRight') showLightboxImage((lbIndex + 1) % lbImages.length);
+});
 
 document.getElementById('collection-grid').addEventListener('click', (e) => {
   const img = e.target.closest('.item-img')?.querySelector('img');
-  if (img) openLightbox(img.src, img.alt);
+  if (!img) return;
+  const all = img.dataset.images ? img.dataset.images.split(',') : [img.src];
+  openLightbox(all, 0, img.alt);
 });
