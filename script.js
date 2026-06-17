@@ -59,10 +59,11 @@ async function loadProducts() {
   }
 }
 
-function buildCard({ name, category, description, price, image_url, images }) {
-  const primaryImg = (images && images.length > 0) ? images[0] : image_url;
+function buildCard({ name, category, description, price, image_url }) {
+  const allImages = image_url ? image_url.split(',').map(u => u.trim()).filter(Boolean) : [];
+  const primaryImg = allImages[0] || null;
   const imgHTML = primaryImg
-    ? `<img src="${primaryImg}" alt="${name}" loading="lazy" />`
+    ? `<img src="${primaryImg}" alt="${name}" loading="lazy" data-images="${allImages.join(',')}" />`
     : `<div class="item-img-placeholder">
         <svg viewBox="0 0 80 60" width="60" opacity="0.25" fill="none" stroke="#c8922a" stroke-width="1.2">
           <rect x="10" y="10" width="60" height="40" rx="3"/>
